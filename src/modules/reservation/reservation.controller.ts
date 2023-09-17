@@ -2,6 +2,7 @@ import { Controller, Get, Query, Version } from "@nestjs/common";
 
 import { PaginationResponseDto } from "../../common/dto/pagination.response.dto";
 import { ListReservationsQuery } from "./dto/list-reservations.query.dto";
+import { ListReservationsResponseDto } from "./dto/list-reservations.response.dto";
 import { ReservationService } from "./reservation.service";
 
 @Controller("/reservations")
@@ -10,7 +11,7 @@ export class ReservationController {
 
   @Get()
   @Version("1.0")
-  listReservations(@Query() query: ListReservationsQuery): Promise<PaginationResponseDto<object>> {
+  listReservations(@Query() query: ListReservationsQuery): Promise<PaginationResponseDto<ListReservationsResponseDto>> {
     return this.reservationService.getReservations(
       {
         page: query.page,
