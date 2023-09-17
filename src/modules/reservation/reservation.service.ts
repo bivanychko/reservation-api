@@ -18,11 +18,11 @@ export class ReservationService {
     options: IPaginationOptions,
     query: ListReservationsQuery,
   ): Promise<Pagination<ListReservationsResponseDto>> {
-    const { amenityId } = query;
+    const { amenityId, day } = query;
 
     const paginationObject = await paginate<Reservation>(this.reservationRepository, options, {
       relations: { amenity: true },
-      where: { amenity: { id: Equal(amenityId.toString()) } },
+      where: { amenity: { id: Equal(amenityId.toString()) }, date: Equal(day.toString()) },
       order: { startTime: "ASC" },
     });
 
@@ -30,11 +30,16 @@ export class ReservationService {
       return {
         id: item.id,
         userId: item.userId,
-        startTime: item.startTime,
+        startTime: this.getTime(item.startTime),
         amenityName: item.amenity.name,
+        duration: item.startTime - item.endTime,
       };
     });
 
     return new Pagination<ListReservationsResponseDto>(mappedPaginationObject, paginationObject.meta);
+  }
+
+  private getTime(timeInMinutes: number): string {
+    return `${Math.floor(timeInMinutes / 60)}:${timeInMinutes % 60}`;
   }
 }

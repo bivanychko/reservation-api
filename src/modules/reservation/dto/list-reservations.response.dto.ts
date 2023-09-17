@@ -8,8 +8,11 @@ export class ListReservationsResponseDto {
   public userId: string;
 
   @Expose()
-  public startTime: number;
+  public startTime: string;
 
   @Expose()
   public amenityName: string;
+
+  @Expose()
+  public duration: number;
 }
