@@ -1,14 +1,13 @@
 import { DataSource, DataSourceOptions } from "typeorm";
 
-import { Amenity } from "../modules/reservation/entities/amenity.entity";
+import { Amenity, Reservation } from "../modules/reservation/entities";
+import { AddedAmenityTable1694963767467, AddedReservationTable1694972681414 } from "../modules/reservation/migrations";
 import { getDatabaseConfig } from "./database.config";
-
-import { AddedAmenityTable1694963767467 } from "../modules/reservation/migrations/1694963767467-AddedAmenityTable";
 
 const options: DataSourceOptions = {
   type: "postgres",
-  entities: [Amenity],
-  migrations: [AddedAmenityTable1694963767467],
+  entities: [Amenity, Reservation],
+  migrations: [AddedAmenityTable1694963767467, AddedReservationTable1694972681414],
   ...getDatabaseConfig(),
 };
 

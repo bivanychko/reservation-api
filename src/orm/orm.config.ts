@@ -1,12 +1,12 @@
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 
-import { Amenity } from "../modules/reservation/entities/amenity.entity";
+import { Amenity, Reservation } from "../modules/reservation/entities";
 import { getDatabaseConfig } from "./database.config";
 
 export const initOrmConfig = (): TypeOrmModuleOptions => {
   return {
     type: "postgres",
-    entities: [Amenity],
+    entities: [Amenity, Reservation],
     ...getDatabaseConfig(),
   };
 };
