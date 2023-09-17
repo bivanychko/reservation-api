@@ -8,3 +8,6 @@ npm-debug.log*
 
 # Transpiled JavaScript files from Typescript
 /dist
+
+# .env file
+.env

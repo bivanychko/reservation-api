@@ -4,6 +4,7 @@ import * as compression from "compression";
 import helmet from "helmet";
 
 import { AppModule } from "./app.module";
+import { config } from "./config";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -32,7 +33,7 @@ async function bootstrap() {
     header: "Version",
   });
 
-  await app.listen(3000);
+  await app.listen(config.APP_PORT);
 }
 
 bootstrap();
