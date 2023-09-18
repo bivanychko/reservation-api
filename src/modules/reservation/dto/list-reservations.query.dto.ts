@@ -1,7 +1,7 @@
 import { Type } from "class-transformer";
 import { IsNotEmpty, IsNumber, IsPositive } from "class-validator";
 
-import { PaginationQueryDto } from "../../../common/dto/pagination.query.dto";
+import { PaginationQueryDto } from "../../../common/dto";
 
 export class ListReservationsQuery extends PaginationQueryDto {
   @IsNumber()

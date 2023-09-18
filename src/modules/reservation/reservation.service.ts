@@ -1,12 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { groupBy } from "lodash";
+import { Dictionary, groupBy } from "lodash";
 import { IPaginationOptions, Pagination, paginate } from "nestjs-typeorm-paginate";
 import { Equal, FindManyOptions, FindOptionsWhere, Repository } from "typeorm";
 
-import { ListReservationsQuery } from "./dto/list-reservations.query.dto";
-import { ListReservationsResponseDto } from "./dto/list-reservations.response.dto";
-import { Reservation } from "./entities/reservation.entity";
+import { ListReservationsQuery, ListReservationsResponseDto } from "./dto";
+import { Reservation } from "./entities";
 
 @Injectable()
 export class ReservationService {
@@ -33,14 +32,17 @@ export class ReservationService {
     return new Pagination<ListReservationsResponseDto>(mappedPaginationObject, paginationObject.meta);
   }
 
-  async getGroupedReservationsByUserId(userId: string): Promise<unknown> {
+  async getGroupedReservationsByUserId(userId: string): Promise<Dictionary<ListReservationsResponseDto>> {
     const findManyOptionsQuery = this.generateFindManyOptionsQuery({
       userId: Equal(userId),
     });
 
     const reservation = await this.reservationRepository.find(findManyOptionsQuery);
 
-    return groupBy(reservation.map(this.mapReservationToDto), item => item.date);
+    return groupBy(
+      reservation.map(this.mapReservationToDto),
+      item => item.date,
+    ) as unknown as Dictionary<ListReservationsResponseDto>;
   }
 
   private generateFindManyOptionsQuery(filter: FindOptionsWhere<Reservation>): FindManyOptions<Reservation> {
@@ -52,8 +54,6 @@ export class ReservationService {
   }
 
   private mapReservationToDto({ id, userId, amenity, startTime, endTime, date }: Reservation): ListReservationsResponseDto {
-    console.log({ id, userId, amenity, startTime, endTime, date });
-
     return {
       id,
       userId,

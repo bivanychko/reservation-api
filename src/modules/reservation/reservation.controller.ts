@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Query, Version } from "@nestjs/common";
+import { Dictionary } from "lodash";
 
-import { PaginationResponseDto } from "../../common/dto/pagination.response.dto";
-import { ListReservationsQuery } from "./dto/list-reservations.query.dto";
-import { ListReservationsResponseDto } from "./dto/list-reservations.response.dto";
+import { PaginationResponseDto } from "../../common/dto";
+import { ListReservationsQuery, ListReservationsResponseDto } from "./dto";
 import { ReservationService } from "./reservation.service";
 
 @Controller("/reservations")
@@ -23,7 +23,7 @@ export class ReservationController {
 
   @Get("/:userId")
   @Version("1.0")
-  listReservationsByUserId(@Param("userId") userId: string): Promise<unknown> {
+  listReservationsByUserId(@Param("userId") userId: string): Promise<Dictionary<ListReservationsResponseDto>> {
     return this.reservationService.getGroupedReservationsByUserId(userId);
   }
 }
