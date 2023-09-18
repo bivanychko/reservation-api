@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Version } from "@nestjs/common";
+import { Controller, Get, Param, Query, Version } from "@nestjs/common";
 
 import { PaginationResponseDto } from "../../common/dto/pagination.response.dto";
 import { ListReservationsQuery } from "./dto/list-reservations.query.dto";
@@ -19,5 +19,11 @@ export class ReservationController {
       },
       query,
     );
+  }
+
+  @Get("/:userId")
+  @Version("1.0")
+  listReservationsByUserId(@Param("userId") userId: string): Promise<unknown> {
+    return this.reservationService.getGroupedReservationsByUserId(userId);
   }
 }

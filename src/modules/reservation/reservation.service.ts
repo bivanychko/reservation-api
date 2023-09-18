@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { groupBy } from "lodash";
 import { IPaginationOptions, Pagination, paginate } from "nestjs-typeorm-paginate";
 import { Equal, Repository } from "typeorm";
 
@@ -37,6 +38,28 @@ export class ReservationService {
     });
 
     return new Pagination<ListReservationsResponseDto>(mappedPaginationObject, paginationObject.meta);
+  }
+
+  async getGroupedReservationsByUserId(userId: string): Promise<unknown> {
+    const reservation = await this.reservationRepository.find({
+      relations: { amenity: true },
+      where: { userId: Equal(userId) },
+      order: { startTime: "ASC" },
+    });
+
+    return groupBy(
+      reservation.map(item => {
+        return {
+          id: item.id,
+          userId: item.userId,
+          startTime: this.getTime(item.startTime),
+          amenityName: item.amenity.name,
+          duration: item.startTime - item.endTime,
+          date: item.date,
+        };
+      }),
+      item => item.date,
+    );
   }
 
   private getTime(timeInMinutes: number): string {
