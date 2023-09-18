@@ -4,6 +4,7 @@ import * as compression from "compression";
 import helmet from "helmet";
 
 import { AppModule } from "./app.module";
+import { Headers } from "./common/constants";
 import { config } from "./config";
 
 async function bootstrap() {
@@ -14,8 +15,8 @@ async function bootstrap() {
   app.use(compression());
   app.use(
     helmet({
-      crossOriginEmbedderPolicy: { policy: "credentialless" },
-      crossOriginResourcePolicy: { policy: "cross-origin" },
+      crossOriginEmbedderPolicy: { policy: Headers.CREDENTIALLESS },
+      crossOriginResourcePolicy: { policy: Headers.CROSS_ORIGIN },
     }),
   );
 
@@ -30,7 +31,7 @@ async function bootstrap() {
 
   app.enableVersioning({
     type: VersioningType.HEADER,
-    header: "Version",
+    header: Headers.VERSION,
   });
 
   await app.listen(config.APP_PORT);

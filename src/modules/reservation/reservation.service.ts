@@ -4,6 +4,7 @@ import { Dictionary, groupBy } from "lodash";
 import { IPaginationOptions, Pagination, paginate } from "nestjs-typeorm-paginate";
 import { Equal, FindManyOptions, FindOptionsWhere, Repository } from "typeorm";
 
+import { SortOptions } from "../../common/constants";
 import { ListReservationsQuery, ListReservationsResponseDto } from "./dto";
 import { Reservation } from "./entities";
 
@@ -48,7 +49,7 @@ export class ReservationService {
   private generateFindManyOptionsQuery(filter: FindOptionsWhere<Reservation>): FindManyOptions<Reservation> {
     return {
       relations: { amenity: true },
-      order: { startTime: "ASC" },
+      order: { startTime: SortOptions.ASC },
       where: filter,
     };
   }
