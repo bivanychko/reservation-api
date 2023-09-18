@@ -18,7 +18,7 @@ export class UploadController {
       }),
     )
     file: Express.Multer.File,
-  ) {
+  ): Promise<object[]> {
     return this.uploadService.parseCsv(file.buffer.toString(Encodings.BASE64));
   }
 }

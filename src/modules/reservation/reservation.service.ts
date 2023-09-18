@@ -60,7 +60,7 @@ export class ReservationService {
       userId,
       amenityName: amenity.name,
       startTime: `${Math.floor(startTime / 60)}:${startTime % 60}`,
-      duration: startTime - endTime,
+      duration: endTime - startTime,
       date: date,
     };
   }
