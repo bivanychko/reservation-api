@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { ReservationModule } from "./modules/reservation/reservation.module";
+import { UploadModule } from "./modules/upload/upload.module";
 import { initOrmConfig } from "./orm/orm.config";
 
 @Module({
@@ -10,6 +11,7 @@ import { initOrmConfig } from "./orm/orm.config";
       useFactory: initOrmConfig,
     }),
     ReservationModule,
+    UploadModule,
   ],
 })
 export class AppModule {}
