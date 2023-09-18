@@ -6,6 +6,7 @@ import helmet from "helmet";
 
 import { AppModule } from "./app.module";
 import { Headers } from "./common/constants";
+import { GlobalFilter } from "./common/filters";
 import { config } from "./config";
 
 async function bootstrap() {
@@ -34,6 +35,8 @@ async function bootstrap() {
     type: VersioningType.HEADER,
     header: Headers.VERSION,
   });
+
+  app.useGlobalFilters(new GlobalFilter());
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle("Swagger")
