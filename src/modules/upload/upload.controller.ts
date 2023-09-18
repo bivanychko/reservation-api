@@ -1,7 +1,7 @@
 import { Controller, FileTypeValidator, ParseFilePipe, Post, UploadedFile, UseInterceptors, Version } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 
-import { Versions } from "../../common/constants";
+import { Encodings, Versions } from "../../common/constants";
 import { UploadService } from "./upload.service";
 
 @Controller("/upload")
@@ -19,6 +19,6 @@ export class UploadController {
     )
     file: Express.Multer.File,
   ) {
-    return this.uploadService.parseCsv(file.buffer.toString("base64"));
+    return this.uploadService.parseCsv(file.buffer.toString(Encodings.BASE64));
   }
 }
