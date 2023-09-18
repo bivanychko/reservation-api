@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { IPaginationMeta, Pagination } from "nestjs-typeorm-paginate";
 
@@ -7,18 +8,33 @@ class PaginationResponseMetaDto implements IPaginationMeta {
   }
 
   @Expose()
+  @ApiProperty({
+    example: 2,
+  })
   public itemCount: number;
 
   @Expose()
+  @ApiProperty({
+    example: 45,
+  })
   public totalItems?: number;
 
   @Expose()
+  @ApiProperty({
+    example: 10,
+  })
   public itemsPerPage: number;
 
   @Expose()
+  @ApiProperty({
+    example: 3,
+  })
   public totalPages?: number;
 
   @Expose()
+  @ApiProperty({
+    example: 1,
+  })
   public currentPage: number;
 
   [s: string]: unknown;

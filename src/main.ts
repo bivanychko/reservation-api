@@ -1,5 +1,6 @@
 import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as compression from "compression";
 import helmet from "helmet";
 
@@ -33,6 +34,15 @@ async function bootstrap() {
     type: VersioningType.HEADER,
     header: Headers.VERSION,
   });
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle("Swagger")
+    .setDescription("The Reservation API description")
+    .setVersion("1.0")
+    .build();
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+
+  SwaggerModule.setup("docs", app, document);
 
   await app.listen(config.APP_PORT);
 }

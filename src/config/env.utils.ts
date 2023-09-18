@@ -23,6 +23,7 @@ export function validateConfig<T>(config: Record<string, unknown>, envDto: Class
     exposeDefaultValues: true,
   });
 
+  // eslint-disable-next-line
   const errors = validateSync(validatedConfig as Object, {
     skipMissingProperties: false,
   });
