@@ -1,0 +1,128 @@
+{
+	"info": {
+		"_postman_id": "11620074-0a4d-4796-8a51-9068a074f600",
+		"name": "reservation-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List reservation",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Version",
+						"value": "1.0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/api/reservations?amenityId=10&day=1592179200000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"reservations"
+					],
+					"query": [
+						{
+							"key": "amenityId",
+							"value": "10"
+						},
+						{
+							"key": "day",
+							"value": "1592179200000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List grouped reservations by userId",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Version",
+						"value": "1.0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/api/reservations/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"reservations",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload csv",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Version",
+						"value": "1.0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/bivanychko/Downloads/Amenity (2).csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/upload/csv",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"upload",
+						"csv"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Swagger",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/docs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"docs"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
