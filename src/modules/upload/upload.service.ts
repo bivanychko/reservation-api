@@ -9,6 +9,12 @@ import { Encodings } from "../../common/constants";
 export class UploadService {
   constructor() {}
 
+  /**
+   * Parse csv file to JSON
+   *
+   * @param {string} fileBufferInBase64 - Base64 encoded file
+   * @returns {object[]} Parsed JSON file
+   */
   parseCsv(fileBufferInBase64: string): Promise<object[]> {
     const buffer = Buffer.from(fileBufferInBase64, Encodings.BASE64);
     const dataStream = Readable.from(buffer);

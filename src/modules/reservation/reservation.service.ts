@@ -15,13 +15,20 @@ export class ReservationService {
     private readonly reservationRepository: Repository<Reservation>,
   ) {}
 
+  /**
+   * Get paginated reservations by filters
+   *
+   * @param {IPaginationOptions} options - Pagination options
+   * @param {ListReservationsQuery} query - Filters: day and amenityId
+   * @returns {Pagination<ListReservationsResponseDto>} List paginated reservations
+   */
   async getReservations(
     options: IPaginationOptions,
     query: ListReservationsQuery,
   ): Promise<Pagination<ListReservationsResponseDto>> {
     const { amenityId, day } = query;
 
-    const findManyOptionsQuery = this.generateFindManyOptionsQuery({
+    const findManyOptionsQuery = this.generateFindManyReservationsQuery({
       amenity: { id: Equal(amenityId.toString()) },
       date: Equal(day.toString()),
     });
@@ -33,20 +40,33 @@ export class ReservationService {
     return new Pagination<ListReservationsResponseDto>(mappedPaginationObject, paginationObject.meta);
   }
 
+  /**
+   * Get grouped by userId reservations
+   *
+   * @param {string} userId - UserId
+   * @returns {Dictionary<ListReservationsResponseDto>} Grouped reservations
+   */
   async getGroupedReservationsByUserId(userId: string): Promise<Dictionary<ListReservationsResponseDto>> {
-    const findManyOptionsQuery = this.generateFindManyOptionsQuery({
+    const findManyOptionsQuery = this.generateFindManyReservationsQuery({
       userId: Equal(userId),
     });
 
     const reservation = await this.reservationRepository.find(findManyOptionsQuery);
 
+    //Using lodash here because typeorm repository pattern does not support groupBy
     return groupBy(
       reservation.map(this.mapReservationToDto),
       item => item.date,
     ) as unknown as Dictionary<ListReservationsResponseDto>;
   }
 
-  private generateFindManyOptionsQuery(filter: FindOptionsWhere<Reservation>): FindManyOptions<Reservation> {
+  /**
+   * Generate find many reservations query
+   *
+   * @param {FindOptionsWhere<Reservation>} filter - Find criterias
+   * @returns {FindManyOptions<Reservation>} Query
+   */
+  private generateFindManyReservationsQuery(filter: FindOptionsWhere<Reservation>): FindManyOptions<Reservation> {
     return {
       relations: { amenity: true },
       order: { startTime: SortOptions.ASC },
@@ -54,6 +74,12 @@ export class ReservationService {
     };
   }
 
+  /**
+   * Map reservation item to response dto
+   *
+   * @param {Reservation} { id, userId, amenity, startTime, endTime, date } - Reservation entity to map
+   * @returns {ListReservationsResponseDto} Mapped reservation
+   */
   private mapReservationToDto({ id, userId, amenity, startTime, endTime, date }: Reservation): ListReservationsResponseDto {
     return {
       id,
