@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { groupBy } from "lodash";
 import { IPaginationOptions, Pagination, paginate } from "nestjs-typeorm-paginate";
-import { Equal, Repository } from "typeorm";
+import { Equal, FindManyOptions, FindOptionsWhere, Repository } from "typeorm";
 
 import { ListReservationsQuery } from "./dto/list-reservations.query.dto";
 import { ListReservationsResponseDto } from "./dto/list-reservations.response.dto";
@@ -21,48 +21,46 @@ export class ReservationService {
   ): Promise<Pagination<ListReservationsResponseDto>> {
     const { amenityId, day } = query;
 
-    const paginationObject = await paginate<Reservation>(this.reservationRepository, options, {
-      relations: { amenity: true },
-      where: { amenity: { id: Equal(amenityId.toString()) }, date: Equal(day.toString()) },
-      order: { startTime: "ASC" },
+    const findManyOptionsQuery = this.generateFindManyOptionsQuery({
+      amenity: { id: Equal(amenityId.toString()) },
+      date: Equal(day.toString()),
     });
 
-    const mappedPaginationObject = paginationObject.items.map(item => {
-      return {
-        id: item.id,
-        userId: item.userId,
-        startTime: this.getTime(item.startTime),
-        amenityName: item.amenity.name,
-        duration: item.startTime - item.endTime,
-      };
-    });
+    const paginationObject = await paginate<Reservation>(this.reservationRepository, options, findManyOptionsQuery);
+
+    const mappedPaginationObject = paginationObject.items.map(this.mapReservationToDto);
 
     return new Pagination<ListReservationsResponseDto>(mappedPaginationObject, paginationObject.meta);
   }
 
   async getGroupedReservationsByUserId(userId: string): Promise<unknown> {
-    const reservation = await this.reservationRepository.find({
-      relations: { amenity: true },
-      where: { userId: Equal(userId) },
-      order: { startTime: "ASC" },
+    const findManyOptionsQuery = this.generateFindManyOptionsQuery({
+      userId: Equal(userId),
     });
 
-    return groupBy(
-      reservation.map(item => {
-        return {
-          id: item.id,
-          userId: item.userId,
-          startTime: this.getTime(item.startTime),
-          amenityName: item.amenity.name,
-          duration: item.startTime - item.endTime,
-          date: item.date,
-        };
-      }),
-      item => item.date,
-    );
+    const reservation = await this.reservationRepository.find(findManyOptionsQuery);
+
+    return groupBy(reservation.map(this.mapReservationToDto), item => item.date);
   }
 
-  private getTime(timeInMinutes: number): string {
-    return `${Math.floor(timeInMinutes / 60)}:${timeInMinutes % 60}`;
+  private generateFindManyOptionsQuery(filter: FindOptionsWhere<Reservation>): FindManyOptions<Reservation> {
+    return {
+      relations: { amenity: true },
+      order: { startTime: "ASC" },
+      where: filter,
+    };
+  }
+
+  private mapReservationToDto({ id, userId, amenity, startTime, endTime, date }: Reservation): ListReservationsResponseDto {
+    console.log({ id, userId, amenity, startTime, endTime, date });
+
+    return {
+      id,
+      userId,
+      amenityName: amenity.name,
+      startTime: `${Math.floor(startTime / 60)}:${startTime % 60}`,
+      duration: startTime - endTime,
+      date: date,
+    };
   }
 }

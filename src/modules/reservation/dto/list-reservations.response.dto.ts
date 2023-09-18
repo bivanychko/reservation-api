@@ -15,4 +15,7 @@ export class ListReservationsResponseDto {
 
   @Expose()
   public duration: number;
+
+  @Expose()
+  public date: string;
 }
