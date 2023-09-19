@@ -21,8 +21,7 @@
     "seed:create": "typeorm migration:create $npm_config_path/seeds/$npm_config_name",
     "typeorm": "typeorm-ts-node-commonjs -d src/orm/migration.config.ts",
     "typeorm:seed": "typeorm-ts-node-commonjs -d src/orm/seed.config.ts",
-    "test": "jest",
-    "test:cov": "jest --coverage"
+    "test": "jest --config ./jest.config.json"
   },
   "engines": {
     "node": "18.x",

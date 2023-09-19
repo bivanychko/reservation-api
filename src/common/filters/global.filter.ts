@@ -7,8 +7,8 @@ export class GlobalFilter implements ExceptionFilter {
     const response = res.getResponse();
 
     return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        messages: [exception.message],
+      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+      messages: [exception.message],
     });
   }
 }

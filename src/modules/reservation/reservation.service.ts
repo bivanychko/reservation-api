@@ -81,8 +81,10 @@ export class ReservationService {
    * @returns {ListReservationsResponseDto} Mapped reservation
    */
   private mapReservationToDto({ id, userId, amenity, startTime, endTime, date }: Reservation): ListReservationsResponseDto {
-    const minutes = (startTime % 60).toString().padStart(2, '0');
-    const hours = Math.floor(startTime / 60).toString().padStart(2, '0');
+    const minutes = (startTime % 60).toString().padStart(2, "0");
+    const hours = Math.floor(startTime / 60)
+      .toString()
+      .padStart(2, "0");
 
     return {
       id,
