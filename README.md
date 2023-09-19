@@ -2,10 +2,15 @@
 
 ### Env vars
 APP_PORT=3000
+
 DB_HOST=localhost
+
 DB_PORT=5432
+
 DB_USERNAME=postgres
+
 DB_PASSWORD=postgres
+
 DB_NAME=reservation_api
 
 If you want override default env vars please add .env file in the root dir
