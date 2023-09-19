@@ -1,14 +1,25 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus } from "@nestjs/common";
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from "@nestjs/common";
+import { Response } from "express";
 
 @Catch()
 export class GlobalFilter implements ExceptionFilter {
-  catch(exception, host: ArgumentsHost) {
-    const res = host.switchToHttp();
-    const response = res.getResponse();
+  catch(exception: unknown, host: ArgumentsHost) {
+    let responseData: unknown;
+    let statusCode: number;
 
-    return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-      messages: [exception.message],
-    });
+    if (exception instanceof HttpException) {
+      responseData = exception.getResponse();
+      statusCode = exception.getStatus();
+    } else {
+      responseData = { message: "Internal Server error" };
+      statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+
+      //Ideally should be sentry as well
+      console.error(exception);
+    }
+
+    const response: Response = host.switchToHttp().getResponse();
+
+    return response.status(statusCode).json(responseData);
   }
 }
