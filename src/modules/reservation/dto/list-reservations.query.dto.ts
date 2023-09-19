@@ -11,6 +11,7 @@ export class ListReservationsQuery extends PaginationQueryDto {
   @Type(() => Number)
   @ApiProperty({
     example: "4",
+    required: true,
   })
   public amenityId: number;
 
@@ -20,6 +21,7 @@ export class ListReservationsQuery extends PaginationQueryDto {
   @Type(() => Number)
   @ApiProperty({
     example: "1590105600000",
+    required: true,
   })
   public day: number;
 }

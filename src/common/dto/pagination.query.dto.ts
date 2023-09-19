@@ -12,6 +12,7 @@ export class PaginationQueryDto {
   @IsOptional()
   @ApiProperty({
     example: 1,
+    required: false,
   })
   public page: number = 1;
 
@@ -22,6 +23,7 @@ export class PaginationQueryDto {
   @IsOptional()
   @ApiProperty({
     example: 10,
+    required: false,
   })
   public limit: number = DEFAULT_PER_PAGE;
 }

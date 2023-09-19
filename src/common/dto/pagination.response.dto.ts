@@ -10,30 +10,35 @@ class PaginationResponseMetaDto implements IPaginationMeta {
   @Expose()
   @ApiProperty({
     example: 2,
+    required: true,
   })
   public itemCount: number;
 
   @Expose()
   @ApiProperty({
     example: 45,
+    required: true,
   })
   public totalItems?: number;
 
   @Expose()
   @ApiProperty({
     example: 10,
+    required: true,
   })
   public itemsPerPage: number;
 
   @Expose()
   @ApiProperty({
     example: 3,
+    required: true,
   })
   public totalPages?: number;
 
   @Expose()
   @ApiProperty({
     example: 1,
+    required: true,
   })
   public currentPage: number;
 
